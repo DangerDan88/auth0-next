@@ -2,9 +2,17 @@ import Head from "next/head";
 import Nav from "./components/Nav";
 import { table, minifyRecords } from "./api/utils/airtable";
 import Todo from "./components/Todo";
+import React, { useEffect, useContext } from "react";
+import { TodosContext } from "../contexts/TodosContext";
 
 export default function Home({ initialTodos }) {
-  //console.log(initialTodos);
+  // useContext needs to be destructured with an object after you have createdContext object not an array like useState
+  const { todos, setTodos } = useContext(TodosContext);
+
+  useEffect(() => {
+    setTodos(initialTodos);
+  }, []);
+
   return (
     <div>
       <Head>
@@ -15,9 +23,7 @@ export default function Home({ initialTodos }) {
       <h1>
         <div className="p-4 shadow rounded bg-white">
           <ul>
-            {initialTodos.map((todo) => (
-              <Todo key={todo.id} todo={todo} />
-            ))}
+            {todos && todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
           </ul>
         </div>
       </h1>
